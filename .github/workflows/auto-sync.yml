@@ -1,4 +1,4 @@
-name: Sync to Gitee
+name: Sync to mirror repo
 on:
   push:
     branches:
@@ -11,16 +11,16 @@ jobs:
       gitee_user: ${{ secrets.GITEE_USER }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: sync github -> gitee
+      - name: sync to gitee
         uses: Yikun/hub-mirror-action@master
         if: env.dst_key && env.dst_token && env.gitee_user
         with:
           src: github/SuperManito
           dst: gitee/SuperManito
           dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
-          dst_token:  ${{ secrets.GITEE_TOKEN }}
+          dst_token: ${{ secrets.GITEE_TOKEN }}
           static_list: "LinuxMirrors"
           force_update: true

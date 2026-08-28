@@ -4,36 +4,21 @@ hide:
   - toc
   - feedback
   - footer
+search:
+  exclude: true
 ---
 
 ## 中国大陆 :flag-CN:
 
-> 下方列表中的镜像站均支持 `Debian` `Ubuntu` `CentOS` `openSUSE` `openEuler` 软件源，列表根据单位性质、地理位置、名称长度进行排序，与实际速度无关
-
-| 镜像站 | IPv6 | Arch Linux | Kali Linux | Deepin | Rocky Linux | AlmaLinux | EPEL :material-information-outline:{ title="EPEL (Extra Packages for Enterprise Linux) 是由 Fedora 组织维护的一个附加软件包仓库，它主要适用于除 Fedora 操作系统以外的红帽系 Linux 发行版" } | Fedora | OpenCloudOS | Alpine Linux | Armbian | Proxmox | Linux Mint | Gentoo | Anolis OS | openKylin |
-| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-| [阿里云](https://mirrors.aliyun.com "mirrors.aliyun.com") | :supported: | :supported: | :supported: | :supported: | :incompatible: | :supported: | :supported: | :supported: | :unsupport: | :supported: | :supported: | :unsupport: | :supported: | :supported: | :supported: | :supported: |
-| [腾讯云](https://mirrors.tencent.com "mirrors.tencent.com") | :unsupport: | :supported: | :supported: | :unsupport: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :unsupport: | :unsupport: | :supported: | :supported: | :unsupport: | :unsupport: |
-| [华为云](https://mirrors.huaweicloud.com "mirrors.huaweicloud.com") | :unsupport: | :supported: | :supported: | :supported: | :incompatible: | :supported: | :supported: | :supported: | :unsupport: | :supported: | :unsupport: | :unsupport: | :supported: | :supported: | :unsupport: | :unsupport: |
-| [网易](https://mirrors.163.com "mirrors.163.com") | :unsupport: | :supported: | :unsupport: | :supported: | :supported: | :unsupport: | :unsupport: | :supported: | :unsupport: | :unsupport: | :unsupport: | :unsupport: | :supported: | :supported: | :unsupport: | :supported: |
-| [火山引擎](https://developer.volcengine.com/mirror "mirrors.volces.com") | :unsupport: | :unsupport: | :supported: | :supported: | :incompatible: | :supported: | :supported: | :supported: | :unsupport: | :supported: | :unsupport: | :unsupport: | :unsupport: | :unsupport: | :unsupport: | :unsupport: |
-| [清华大学](https://mirrors.tuna.tsinghua.edu.cn "mirrors.tuna.tsinghua.edu.cn") | :supported: | :supported: | :supported: | :supported: | :unsupport: | :unsupport: | :supported: | :supported: | :unsupport: | :supported: | :supported: | :supported: | :supported: | :supported: | :unsupport: | :unsupport: |
-| [北京大学](https://mirrors.pku.edu.cn/Mirrors "mirrors.pku.edu.cn") | :supported: | :supported: | :unsupport: | :unsupport: | :supported: | :supported: | :supported: | :unsupport: | :unsupport: | :unsupport: | :unsupport: | :unsupport: | :unsupport: | :unsupport: | :unsupport: | :unsupport: |
-| [浙江大学](https://mirrors.zju.edu.cn "mirrors.zju.edu.cn") | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :unsupport: | :supported: | :unsupport: | :unsupport: | :supported: | :supported: | :supported: | :unsupport: |
-| [南京大学](https://mirrors.nju.edu.cn "mirrors.nju.edu.cn") | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: |
-| [兰州大学](https://mirror.lzu.edu.cn "mirror.lzu.edu.cn") | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :unsupport: | :supported: | :unsupport: | :unsupport: | :supported: | :supported: | :unsupport: | :supported: |
-| [上海交通大学](https://mirror.sjtu.edu.cn "mirror.sjtu.edu.cn") | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :incompatible: | :incompatible: | :supported: | :incompatible: | :supported: | :unsupport: | :supported: | :incompatible: | :unsupport: | :supported: |
-| [重庆邮电大学](https://mirrors.cqupt.edu.cn "mirrors.cqu.edu.cn") | :supported: | :supported: | :supported: | :supported: | :unsupport: | :supported: | :supported: | :supported: | :unsupport: | :supported: | :supported: | :supported: | :unsupport: | :unsupport: | :unsupport: | :unsupport: |
-| [中国科学技术大学](https://mirrors.ustc.edu.cn "mirrors.ustc.edu.cn") | :supported: | :supported: | :supported: | :supported: | :supported: | :unsupport: | :supported: | :supported: | :unsupport: | :supported: | :supported: | :supported: | :supported: | :supported: | :unsupport: | :unsupport: |
-| [中国科学院软件研究所](https://mirror.iscas.ac.cn "mirror.iscas.ac.cn") | :unsupport: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :supported: | :unsupport: | :supported: |
+<div id="mirrors-table"><p>正在加载表格 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" style="vertical-align: -0.15rem"><g stroke="var(--md-default-fg-color--light)"><circle cx="12" cy="12" r="9.5" fill="none" stroke-linecap="round" stroke-width="3"><animate attributeName="stroke-dasharray" calcMode="spline" dur="1.5s" keySplines="0.42,0,0.58,1;0.42,0,0.58,1;0.42,0,0.58,1" keyTimes="0;0.475;0.95;1" repeatCount="indefinite" values="0 150;42 150;42 150;42 150"/><animate attributeName="stroke-dashoffset" calcMode="spline" dur="1.5s" keySplines="0.42,0,0.58,1;0.42,0,0.58,1;0.42,0,0.58,1" keyTimes="0;0.475;0.95;1" repeatCount="indefinite" values="0;-16;-59;-59"/></circle><animateTransform attributeName="transform" dur="2s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></g></svg></p></div>
 
 ???+ question "使用帮助"
 
-    :supported: 支持 &nbsp;&nbsp; :unsupport: 不支持 &nbsp;&nbsp; :incompatible: 不兼容，表示软件源分支命名不符合脚本默认规则但可以通过命令选项来使用，关于具体用法示例和各操作系统所使用的默认分支名称[详见此处](../use/index.md#指定软件源仓库)
+    :supported: 支持 &nbsp;&nbsp; :unsupport: 不支持 &nbsp;&nbsp; :incompatible: 不兼容，表示镜像站上的仓库目录命名不符合脚本默认规则但可以通过命令选项来使用，关于具体用法示例和各操作系统所使用的默认分支名称[详见此处](../use/index.md#指定软件源仓库目录)
 
-    如果这里没有想使用的镜像站那可以看看其它运行模式和命令选项。软件源的速度区分刷新速度和下行速率，后者才是关键，具体请结合实际地理位置选择尝试，还可以通过[辅助工具网站](#工具网站)进行一些测试
+    如果这里没有想使用的镜像站那可以看看其它运行模式和命令选项。镜像站的速度分为同步刷新速度和用户下载速度，后者才是关键，具体请结合实际地理位置选择尝试，还可以通过[辅助工具网站](#工具网站)进行一些测试
 
-    :material-thumb-up-outline: 使用建议：速度上推荐 `中科大`、`字节跳动(火山引擎)`，地域兼容性上推荐 `阿里云`、`腾讯云`，软件源种类上推荐 `南京大学`，境外、海外或复杂网络环境下不建议使用 `清华(TUNA)` 等容易阻断的镜像站
+    :material-thumb-up-outline: 使用建议：速度上推荐 `中科大`、`字节(火山引擎)`，地域兼容性上推荐 `阿里云`、`腾讯云`，软件源种类上推荐 `南京大学`、`中科院`，境外、海外或复杂网络环境下不建议使用 `清华(TUNA)` 等容易阻断的镜像站
 
 ??? note "中国大陆教育网（点击展开查看）"
 
@@ -83,8 +68,9 @@ hide:
     | 亚洲 · xTom · 新加坡 :flag-SG: | [mirrors.xtom.sg](https://mirrors.xtom.sg "https://mirrors.xtom.sg") |
     | 亚洲 · 自由软件实验室(NCHC) · 台湾 :flag-TW: | [free.nchc.org.tw](https://free.nchc.org.tw "https://free.nchc.org.tw") |
     | 亚洲 · OSS Planet · 台湾 :flag-TW: | [mirror.ossplanet.net](https://mirror.ossplanet.net "https://mirror.ossplanet.net") |
-    | 亚洲 · 国立阳明交通大学 · 台湾 :flag-TW: | [linux.cs.nctu.edu.tw](https://linux.cs.nctu.edu.tw "https://linux.cs.nctu.edu.tw") |
+    | 亚洲 · 国立阳明交通大学 · 台湾 :flag-TW: | [linux.cs.nycu.edu.tw](https://linux.cs.nycu.edu.tw "https://linux.cs.nycu.edu.tw") |
     | 亚洲 · 淡江大学 · 台湾 :flag-TW: | [ftp.tku.edu.tw](https://ftp.tku.edu.tw "https://ftp.tku.edu.tw") |
+    | 亚洲 · Taiwan Digital Streaming · 台湾 :flag-TW: | [mirror.twds.com.tw](https://mirror.twds.com.tw "https://mirror.twds.com.tw") |
     | 亚洲 · AniGil Linux Archive · 韩国 :flag-KR: | [mirror.anigil.com](https://mirror.anigil.com "https://mirror.anigil.com") |
     | 亚洲 · 工业网络安全中心(ICSCoE) · 日本 :flag-JP: | [ftp.udx.icscoe.jp/Linux](https://ftp.udx.icscoe.jp/Linux "https://ftp.udx.icscoe.jp/Linux") |
     | 亚洲 · 北陆先端科学技术大学院大学(JAIST) · 日本 :flag-JP: | [ftp.jaist.ac.jp/pub/Linux](https://ftp.jaist.ac.jp/pub/Linux "https://ftp.jaist.ac.jp/pub/Linux") |
@@ -180,8 +166,9 @@ hide:
     | 亚洲 · xTom · 新加坡 :flag-SG: | [mirrors.xtom.sg](https://mirrors.xtom.sg "https://mirrors.xtom.sg") |
     | 亚洲 · 自由软件实验室(NCHC) · 台湾 :flag-TW: | [free.nchc.org.tw](https://free.nchc.org.tw "https://free.nchc.org.tw") |
     | 亚洲 · OSS Planet · 台湾 :flag-TW: | [mirror.ossplanet.net](https://mirror.ossplanet.net "https://mirror.ossplanet.net") |
-    | 亚洲 · 国立阳明交通大学 · 台湾 :flag-TW: | [linux.cs.nctu.edu.tw](https://linux.cs.nctu.edu.tw "https://linux.cs.nctu.edu.tw") |
+    | 亚洲 · 国立阳明交通大学 · 台湾 :flag-TW: | [linux.cs.nycu.edu.tw](https://linux.cs.nycu.edu.tw "https://linux.cs.nycu.edu.tw") |
     | 亚洲 · 淡江大学 · 台湾 :flag-TW: | [ftp.tku.edu.tw](https://ftp.tku.edu.tw "https://ftp.tku.edu.tw") |
+    | 亚洲 · Taiwan Digital Streaming · 台湾 :flag-TW: | [mirror.twds.com.tw](https://mirror.twds.com.tw "https://mirror.twds.com.tw") |
     | 亚洲 · AniGil Linux Archive · 韩国 :flag-KR: | [mirror.anigil.com](https://mirror.anigil.com "https://mirror.anigil.com") |
     | 亚洲 · 工业网络安全中心(ICSCoE) · 日本 :flag-JP: | [ftp.udx.icscoe.jp/Linux](https://ftp.udx.icscoe.jp/Linux "https://ftp.udx.icscoe.jp/Linux") |
     | 亚洲 · 北陆先端科学技术大学院大学(JAIST) · 日本 :flag-JP: | [ftp.jaist.ac.jp/pub/Linux](https://ftp.jaist.ac.jp/pub/Linux "https://ftp.jaist.ac.jp/pub/Linux") |
@@ -243,13 +230,13 @@ hide:
 
 ???+ note "帮助项目完善更多境外、海外软件源"
 
-    该列表中的软件源参考自 [`Ubuntu 镜像列表`](https://launchpad.net/ubuntu/+cdmirrors "https://launchpad.net/ubuntu/+cdmirrors")、[`Debian 镜像列表`](https://www.debian.org/CD/http-ftp/#mirrors "https://www.debian.org/CD/http-ftp/#mirrors")、[`Fedora Mirror Manager`](https://admin.fedoraproject.org/mirrormanager/mirrors "https://admin.fedoraproject.org/mirrormanager/mirrors") 并且在此之前全部经过了有效性验证，但未作实际测试
+    该列表中的软件源参考自 [`Ubuntu 镜像列表`](https://launchpad.net/ubuntu/+cdmirrors "https://launchpad.net/ubuntu/+cdmirrors")、[`Debian 镜像列表`](https://www.debian.org/CD/http-ftp/#mirrors "https://www.debian.org/CD/http-ftp/#mirrors")、[`Fedora Mirror Manager`](https://mirrormanager.fedoraproject.org/mirrors "https://mirrormanager.fedoraproject.org/mirrors") 并且在此之前全部经过了有效性验证，但未作实际测试
 
-    作者没有精力持续维护列表中的这些境外、海外镜像站，如果你想补充更多软件源或更正当前已有，请修改脚本内的 [`mirror_list_abroad 数组变量`](https://github.com/SuperManito/LinuxMirrors/blame/main/ChangeMirrors.sh#L60 "https://github.com/SuperManito/LinuxMirrors/blame/main/ChangeMirrors.sh#L66") 并按照下面的编辑规范进行修改
+    作者没有精力持续维护列表中的这些境外、海外镜像站，如果你想补充更多软件源或更正当前已有，请修改脚本内的 [`mirror_list_abroad 数组变量`](https://github.com/SuperManito/LinuxMirrors/blob/main/ChangeMirrors.sh#L70 "https://github.com/SuperManito/LinuxMirrors/blob/main/ChangeMirrors.sh#L70") 并按照下面的编辑规范进行修改
 
-    你可以在确认软件源地址无误后前往 GitHub 仓库提交 [Pull Requests](https://github.com/SuperManito/LinuxMirrors/pulls "https://github.com/SuperManito/LinuxMirrors/pulls")，也可以 :material-source-fork: Fork 仓库后自行定制使用
+    你可以在确认镜像站地址无误后前往 GitHub 仓库提交 [Pull Requests](https://github.com/SuperManito/LinuxMirrors/pulls "https://github.com/SuperManito/LinuxMirrors/pulls")，也可以 :material-source-fork: Fork 仓库后自行定制使用
 
-    - 境外以及海外软件源编辑规范：
+    - 境外以及海外软件源（镜像站）编辑规范：
 
         完整格式：`洲 · 软件源名称 · 国家/地区@软件源地址(域名)`
 
@@ -260,12 +247,18 @@ hide:
             注：`Technology` 一词应称为 `理工` 而不能使用翻译结果的 `技术` 一词，大部分教育单位都有正式或公认的中文译名
 
         - 非教育单位：应优先采用其上属官网所自称的品牌名称，注意是正式的英文名称而不是logo中的字符，如果没有并且网站是除中文、英文以外的语言文字应使用网站域名作为名称
- 
+
 ## 工具网站
 
 <button class="md-button" title="https://tool.chinaz.com" onclick="window.open('https://tool.chinaz.com')">域名查询</button>
 <button class="md-button" title="https://tools.ipip.net/newping.php" onclick="window.open('https://tools.ipip.net/newping.php')">Ping 延迟测试</button>
 <button class="md-button" title="https://tools.ipip.net/traceroute.php" onclick="window.open('https://tools.ipip.net/traceroute.php')">Tracert 路由追踪测试</button>
-<button class="md-button" title="https://ipw.cn/ipv6webcheck" onclick="window.open('https://ipw.cn/ipv6webcheck')">IPv6 接入测试</button>
+<button class="md-button" title="https://www.guokeyun.com/ipv6Monitor.html" onclick="window.open('https://www.guokeyun.com/ipv6Monitor.html')">IPv6 接入测试</button>
 
-!!! tip "该页面展示的均为脚本默认提供可供选择的软件源地址，如果没有找到你想使用的也没有关系，脚本支持命令选项可自定义使用，详见[高级用法](../use/index.md#命令选项高级用法)</br>特此声明：本页面涉及的旗帜图标仅用于快速区分地理位置不代表作者的任何政治立场，请不要过度解读！"
+!!! tip "该页面展示的均为脚本默认提供可供选择的软件源地址，如果没有找到你想使用的也没有关系，脚本支持命令选项可自定义使用，详见[高级用法](../use/index.md#命令选项高级用法)"
+
+---
+
+!!! warning "由于该页面的信息可能会引起争议，为了避免不必要的麻烦，建议不要在部分社交媒体的分享中包含此页面内容"
+
+    本页面涉及的旗帜图标仅用于快速区分地理位置，不代表作者任何的政治立场，请不要过度解读，特此声明。

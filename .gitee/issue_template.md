@@ -1,5 +1,7 @@
 <!-- 这是隐藏的信息
 
+请在创建此 Issue 前排除软件源（镜像站）故障等非本项目脚本自身问题，建议先尝试重新运行脚本并检查网络连接。
+
 在提交前请阅读下面的内容：
 
 ⚠️如果方便的话请优先在 GitHub 官方仓库提交 Issue！
@@ -26,27 +28,32 @@
 - [ ] `Deepin`
 - [ ] `Zorin OS`
 - [ ] `Armbian`
-- [ ] `Proxmox`
+- [ ] `Proxmox VE`
+- [ ] `Raspberry Pi OS`
 - [ ] `Red Hat Enterprise Linux`
 - [ ] `Fedora`
 - [ ] `CentOS`
 - [ ] `Rocky Linux`
 - [ ] `AlmaLinux`
+- [ ] `Oracle Linux`
 - [ ] `openEuler`
 - [ ] `OpenCloudOS`
 - [ ] `openKylin`
 - [ ] `Anolis OS`
 - [ ] `openSUSE`
 - [ ] `Arch Linux`
+- [ ] `Manjaro`
+- [ ] `EndeavourOS`
 - [ ] `Alpine Linux`
 - [ ] `Gentoo`
+- [ ] `NixOS`
 
 ## 2. 处理器架构
 <!-- 将中括号内的 "空格" 替换为 "x" ，即为选中，例：" - [x] 否 " -->
 - [ ] `x86_64` `x86_32`
 - [ ] `arm64` `arm/v8` `arm/v7` `arm/v6`
 - [ ] `ppc64le` `s390x`
-- [ ] `Other`
+- [ ] `其它`
 
 ## 3. 系统详细信息
 <!-- 请执行命令 "cat /etc/os-release"，并将输出结果粘贴在下方 -->
@@ -60,7 +67,7 @@
 
 ```
 
-## 5. 详细叙述你的问题
+## 5. 描述遇到的问题
 ### (1) 具体问题
 A：
 
