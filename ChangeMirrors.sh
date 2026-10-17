@@ -1,6 +1,6 @@
 #!/bin/bash
 ## Author: SuperManito
-## Modified: 2026-06-16
+## Modified: 2026-10-07
 ## License: MIT
 ## GitHub: https://github.com/SuperManito/LinuxMirrors
 ## Website: https://linuxmirrors.cn
@@ -36,18 +36,12 @@ mirror_list_default=(
 # 中国大陆教育网
 mirror_list_edu=(
     "mirrors.pku.edu.cn"
-    "mirror.bjtu.edu.cn"
     "mirrors.bfsu.edu.cn"
-    "mirrors.bupt.edu.cn"
     "mirrors.cqu.edu.cn"
     "mirrors.cqupt.edu.cn"
-    "mirrors.neusoft.edu.cn"
-    "mirrors.uestc.cn"
-    "mirrors.scau.edu.cn"
     "mirrors.hust.edu.cn"
     "mirrors.jlu.edu.cn"
     "mirrors.jcut.edu.cn"
-    "mirrors.jxust.edu.cn"
     "mirror.lzu.edu.cn"
     "mirrors.nju.edu.cn"
     "mirrors.njtech.edu.cn"
@@ -57,7 +51,6 @@ mirror_list_edu=(
     "mirrors.qlu.edu.cn"
     "mirrors.tuna.tsinghua.edu.cn"
     "mirrors.sdu.edu.cn"
-    "mirrors.shanghaitech.edu.cn"
     "mirror.sjtu.edu.cn"
     "mirrors.sjtug.sjtu.edu.cn"
     "mirrors.wsyu.edu.cn"
@@ -77,7 +70,6 @@ mirror_list_abroad=(
     "free.nchc.org.tw"
     "mirror.ossplanet.net"
     "linux.cs.nycu.edu.tw"
-    "ftp.tku.edu.tw"
     "mirror.twds.com.tw"
     "mirror.anigil.com"
     "ftp.udx.icscoe.jp/Linux"
@@ -87,7 +79,6 @@ mirror_list_abroad=(
     "mirrors.gbnetwork.com"
     "mirror.kku.ac.th"
     "mirror.vorboss.net"
-    "mirror.quickhost.uk"
     "mirror.dogado.de"
     "mirrors.xtom.de"
     "ftp.halifax.rwth-aachen.de"
@@ -97,7 +88,6 @@ mirror_list_abroad=(
     "eclats.crans.org"
     "ftp.crihan.fr"
     "mirrors.xtom.nl"
-    "mirror.datapacket.com"
     "eu.edge.kernel.org"
     "mirrors.xtom.ee"
     "mirror.netsite.dk"
@@ -105,15 +95,10 @@ mirror_list_abroad=(
     "mirror.accum.se"
     "ftp.lysator.liu.se"
     "mirror.yandex.ru"
-    "mirror.linux-ia64.org"
-    "mirror.truenetwork.ru"
     "ftp.belnet.be/mirror"
-    "ftp.cc.uoc.gr/mirrors/linux"
     "ftp.fi.muni.cz/pub/linux"
     "ftp.sh.cvut.cz"
     "mirror.karneval.cz/pub/linux"
-    "mirrors.nic.cz"
-    "mirror.ethz.ch"
     "mirrors.kernel.org"
     "mirrors.mit.edu"
     "mirror.math.princeton.edu/pub"
@@ -126,14 +111,11 @@ mirror_list_abroad=(
     "mirrors.switch.ca"
     "mirror.pop-sc.rnp.br/mirror"
     "mirror.uepg.br"
-    "mirror.ufscar.br"
-    "mirrors.eze.sysarmy.com"
     "gsl-syd.mm.fcix.net"
     "mirror.aarnet.edu.au/pub"
     "mirror.datamossa.io"
     "mirror.amaze.com.au"
     "mirrors.xtom.au"
-    "mirror.overthewire.com.au"
     "mirror.fsmg.org.nz"
     "mirror.liquidtelecom.com"
     "mirror.dimensiondata.com"
@@ -176,7 +158,6 @@ SPONSOR_ADS=(
     "语鹿云盾 · 专业CDN加速、防御，亚太百兆三网优化CDN低至9元起 ➜  \033[3mhttps://www.lucdn.cn\033[0m"
     "不二云 · 国内外建站快响应服务器的不二之选 ➜  \033[3mhttps://cb2.cn\033[0m"
     "蓝易云 · 高防CDN，国内BGP多线/香港/死扛CC/DDos攻击 ➜  \033[3mhttps://www.tsycdn.com\033[0m"
-    "99CDN · 自建 CDN 平台，自主管理节点｜智能流量调度｜多级缓存加速 ➜  \033[3mhttps://www.99cdn.com\033[0m"
     "浪浪云 · BGP网络让每一次连接都纵享丝滑，明码标价、无套路续费 ➜  \033[3mhttps://langlangy.cn\033[0m"
 )
 
@@ -906,7 +887,7 @@ function collect_system_info() {
     local is_supported="true"
     case "${SYSTEM_JUDGMENT}" in
     "${SYSTEM_DEBIAN}")
-        if [[ ! "${SYSTEM_VERSION_ID_MAJOR}" =~ ^(1[0-3]|[8-9])$ ]]; then
+        if [[ ! "${SYSTEM_VERSION_ID_MAJOR}" =~ ^(1[0-4]|[8-9])$ ]]; then
             is_supported="false"
         fi
         if [[ "${SYSTEM_VERSION_CODENAME}" == "sid" ]]; then
@@ -952,7 +933,7 @@ function collect_system_info() {
         fi
         ;;
     "${SYSTEM_OPENEULER}")
-        if [[ "${SYSTEM_VERSION_ID_MAJOR}" != 2[0-5] ]]; then
+        if [[ "${SYSTEM_VERSION_ID_MAJOR}" != 2[0-6] ]]; then
             is_supported="false"
         fi
         ;;
@@ -1043,6 +1024,14 @@ function collect_system_info() {
             ;;
         "${SYSTEM_RASPBERRY_PI_OS}")
             SOURCE_BRANCH="raspberrypi"
+            ;;
+        "${SYSTEM_DEEPIN}")
+            # deepin 25 起仓库路径追加版本代号（如 deepin/beige），旧版本为 deepin
+            if [[ "${SYSTEM_VERSION_ID_MAJOR}" -ge 25 ]]; then
+                SOURCE_BRANCH="deepin/${SYSTEM_VERSION_CODENAME,,}"
+            else
+                SOURCE_BRANCH="deepin"
+            fi
             ;;
         "${SYSTEM_RHEL}")
             case "${SYSTEM_VERSION_ID_MAJOR}" in
@@ -2397,25 +2386,6 @@ ${proposed_source_tips}
 $(gen_deb822_disabled "${1}" "${2}-proposed" "${3}")"
     }
 
-    ## 使用官方源
-    if [[ "${USE_OFFICIAL_SOURCE}" == "true" ]]; then
-        case "${SYSTEM_JUDGMENT}" in
-        "${SYSTEM_UBUNTU}" | "${SYSTEM_ZORIN}")
-            if [[ "${DEVICE_ARCH_RAW}" == "x86_64" || "${DEVICE_ARCH_RAW}" == *i?86* ]]; then
-                SOURCE="archive.ubuntu.com"
-            else
-                SOURCE="ports.ubuntu.com"
-            fi
-            ;;
-        "${SYSTEM_KALI}")
-            SOURCE="http.kali.org"
-            ;;
-        "${SYSTEM_DEEPIN}")
-            SOURCE="community-packages.deepin.com"
-            ;;
-        esac
-    fi
-
     # 注：SOURCE_<XXX> SOURCE_<XXX>_BRANCH 系列变量默认为空值，仅在自定义（使用相关命令选项）时提供，需注意逻辑顺序
     local repo_components=""                          # 软件源仓库区域
     local source_address="${SOURCE}/${SOURCE_BRANCH}" # 软件源地址
@@ -2513,7 +2483,11 @@ $(gen_deb "${source_address}" "${SYSTEM_VERSION_CODENAME}" "${repo_components}")
         fi
         if [[ "${USE_OFFICIAL_SOURCE}" == "true" ]]; then
             SOURCE="community-packages.deepin.com"
-            SOURCE_BRANCH="deepin"
+            if [[ "${SYSTEM_VERSION_ID_MAJOR}" -ge 25 ]]; then
+                SOURCE_BRANCH="deepin/${SYSTEM_VERSION_CODENAME,,}"
+            else
+                SOURCE_BRANCH="deepin"
+            fi
             source_address="${SOURCE}/${SOURCE_BRANCH}"
         fi
         apt_source_content="${deb_src_disabled_tips}
@@ -2674,7 +2648,6 @@ $(gen_deb "${source_address}" "${base_system_codename}" "${repo_components}")"
             apt_source_file="${File_ProxmoxSources}"
             apt_source_content="$(gen_deb822_unsrc "${source_address}/debian/pve" "${SYSTEM_VERSION_CODENAME}" "pve-no-subscription")"
             write_apt_source
-            _DEB22_ARCHIVE_KEYRING=""
             # Ceph 仓库
             if [ -f "${File_ProxmoxCephSources}" ]; then
                 local ceph_codename="$(ceph -v | grep ceph | awk '{print $(NF-1)}')"
@@ -2682,6 +2655,7 @@ $(gen_deb "${source_address}" "${base_system_codename}" "${repo_components}")"
                 apt_source_content="$(gen_deb822_unsrc "${source_address}/debian/ceph-${ceph_codename}" "${SYSTEM_VERSION_CODENAME}" "no-subscription")"
                 write_apt_source
             fi
+            _DEB22_ARCHIVE_KEYRING=""
         else
             apt_source_file="${File_ProxmoxSourceList}"
             apt_source_content="$(gen_deb_unsrc "${source_address}/debian/pve" "${SYSTEM_VERSION_CODENAME}" "pve-no-subscription")"
@@ -3028,7 +3002,7 @@ function change_mirrors_openEuler() {
 
     ## 修改源
     cd $Dir_YumRepos
-    sed -e "s|^baseurl=http|baseurl=${WEB_PROTOCOL}|g" \
+    sed -e "s|^baseurl=https|baseurl=${WEB_PROTOCOL}|g" \
         -e "s|repo.openeuler.org|${SOURCE}/${SOURCE_BRANCH}|g" \
         -i \
         openEuler.repo
@@ -6680,52 +6654,52 @@ function gen_repo_files_openEuler() {
     cat <<'EOF' >$Dir_YumRepos/openEuler.repo
 [OS]
 name=OS
-baseurl=http://repo.openeuler.org/openEuler-version/OS/$basearch/
+baseurl=https://repo.openeuler.org/openEuler-version/OS/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=http://repo.openeuler.org/openEuler-version/OS/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=https://repo.openeuler.org/openEuler-version/OS/$basearch/RPM-GPG-KEY-openEuler
 
 [everything]
 name=everything
-baseurl=http://repo.openeuler.org/openEuler-version/everything/$basearch/
+baseurl=https://repo.openeuler.org/openEuler-version/everything/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=http://repo.openeuler.org/openEuler-version/everything/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=https://repo.openeuler.org/openEuler-version/OS/$basearch/RPM-GPG-KEY-openEuler
 
 [EPOL]
 name=EPOL
-baseurl=http://repo.openeuler.org/openEuler-version/EPOL/main/$basearch/
+baseurl=https://repo.openeuler.org/openEuler-version/EPOL/main/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=http://repo.openeuler.org/openEuler-version/OS/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=https://repo.openeuler.org/openEuler-version/OS/$basearch/RPM-GPG-KEY-openEuler
 
 [debuginfo]
 name=debuginfo
-baseurl=http://repo.openeuler.org/openEuler-version/debuginfo/$basearch/
+baseurl=https://repo.openeuler.org/openEuler-version/debuginfo/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=http://repo.openeuler.org/openEuler-version/debuginfo/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=https://repo.openeuler.org/openEuler-version/debuginfo/$basearch/RPM-GPG-KEY-openEuler
 
 [source]
 name=source
-baseurl=http://repo.openeuler.org/openEuler-version/source/
+baseurl=https://repo.openeuler.org/openEuler-version/source/
 enabled=1
 gpgcheck=1
-gpgkey=http://repo.openeuler.org/openEuler-version/source/RPM-GPG-KEY-openEuler
+gpgkey=https://repo.openeuler.org/openEuler-version/source/RPM-GPG-KEY-openEuler
 
 [update]
 name=update
-baseurl=http://repo.openeuler.org/openEuler-version/update/$basearch/
+baseurl=https://repo.openeuler.org/openEuler-version/update/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=http://repo.openeuler.org/openEuler-version/OS/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=https://repo.openeuler.org/openEuler-version/OS/$basearch/RPM-GPG-KEY-openEuler
 
 [update-source]
 name=update-source
-baseurl=http://repo.openeuler.org/openEuler-version/update/source/
-enabled=1
+baseurl=https://repo.openeuler.org/openEuler-version/update/source/
+enabled=0
 gpgcheck=1
-gpgkey=http://repo.openeuler.org/openEuler-version/source/RPM-GPG-KEY-openEuler
+gpgkey=https://repo.openeuler.org/openEuler-version/source/RPM-GPG-KEY-openEuler
 EOF
     ## 替换版本号
     local version_name="$(get_os_release_value VERSION | sed 's/["()]//g; s/[_ ]\+/-/g; s/^-\+\|-\+$//g')"
@@ -8232,36 +8206,29 @@ function msg_pack_zh_hans() {
         ['mirrors.default.16']='中国科技云'
         ['mirrors.default.17']='官方源'
         ['mirrors.edu.0']='北京大学'
-        ['mirrors.edu.1']='北京交通大学'
-        ['mirrors.edu.2']='北京外国语大学'
-        ['mirrors.edu.3']='北京邮电大学'
-        ['mirrors.edu.4']='重庆大学'
-        ['mirrors.edu.5']='重庆邮电大学'
-        ['mirrors.edu.6']='大连东软信息学院'
-        ['mirrors.edu.7']='电子科技大学'
-        ['mirrors.edu.8']='华南农业大学'
-        ['mirrors.edu.9']='华中科技大学'
-        ['mirrors.edu.10']='吉林大学'
-        ['mirrors.edu.11']='荆楚理工学院'
-        ['mirrors.edu.12']='江西理工大学'
-        ['mirrors.edu.13']='兰州大学'
-        ['mirrors.edu.14']='南京大学'
-        ['mirrors.edu.15']='南京工业大学'
-        ['mirrors.edu.16']='南京邮电大学'
-        ['mirrors.edu.17']='南方科技大学'
-        ['mirrors.edu.18']='南阳理工学院'
-        ['mirrors.edu.19']='齐鲁工业大学'
-        ['mirrors.edu.20']='清华大学'
-        ['mirrors.edu.21']='山东大学'
-        ['mirrors.edu.22']='上海科技大学'
-        ['mirrors.edu.23']='上海交通大学（思源）'
-        ['mirrors.edu.24']='上海交通大学（致远）'
-        ['mirrors.edu.25']='武昌首义学院'
-        ['mirrors.edu.26']='西安交通大学'
-        ['mirrors.edu.27']='西北农林科技大学'
-        ['mirrors.edu.28']='浙江大学'
-        ['mirrors.edu.29']='中国科学技术大学'
-        ['mirrors.edu.30']='官方源'
+        ['mirrors.edu.1']='北京外国语大学'
+        ['mirrors.edu.2']='重庆大学'
+        ['mirrors.edu.3']='重庆邮电大学'
+        ['mirrors.edu.4']='华中科技大学'
+        ['mirrors.edu.5']='吉林大学'
+        ['mirrors.edu.6']='荆楚理工学院'
+        ['mirrors.edu.7']='兰州大学'
+        ['mirrors.edu.8']='南京大学'
+        ['mirrors.edu.9']='南京工业大学'
+        ['mirrors.edu.10']='南京邮电大学'
+        ['mirrors.edu.11']='南方科技大学'
+        ['mirrors.edu.12']='南阳理工学院'
+        ['mirrors.edu.13']='齐鲁工业大学'
+        ['mirrors.edu.14']='清华大学'
+        ['mirrors.edu.15']='山东大学'
+        ['mirrors.edu.16']='上海交通大学（思源）'
+        ['mirrors.edu.17']='上海交通大学（致远）'
+        ['mirrors.edu.18']='武昌首义学院'
+        ['mirrors.edu.19']='西安交通大学'
+        ['mirrors.edu.20']='西北农林科技大学'
+        ['mirrors.edu.21']='浙江大学'
+        ['mirrors.edu.22']='中国科学技术大学'
+        ['mirrors.edu.23']='官方源'
         ['mirrors.abroad.0']='亚洲 · xTom · 香港'
         ['mirrors.abroad.1']='亚洲 · 01Link · 香港'
         ['mirrors.abroad.2']='亚洲 · 新加坡国立大学(NUS) · 新加坡'
@@ -8270,67 +8237,56 @@ function msg_pack_zh_hans() {
         ['mirrors.abroad.5']='亚洲 · 自由软件实验室(NCHC) · 台湾'
         ['mirrors.abroad.6']='亚洲 · OSS Planet · 台湾'
         ['mirrors.abroad.7']='亚洲 · 国立阳明交通大学 · 台湾'
-        ['mirrors.abroad.8']='亚洲 · 淡江大学 · 台湾'
-        ['mirrors.abroad.9']='亚洲 · Taiwan Digital Streaming · 台湾'
-        ['mirrors.abroad.10']='亚洲 · AniGil Linux Archive · 韩国'
-        ['mirrors.abroad.11']='亚洲 · 工业网络安全中心(ICSCoE) · 日本'
-        ['mirrors.abroad.12']='亚洲 · 北陆先端科学技术大学院大学(JAIST) · 日本'
-        ['mirrors.abroad.13']='亚洲 · 山形大学 · 日本'
-        ['mirrors.abroad.14']='亚洲 · xTom · 日本'
-        ['mirrors.abroad.15']='亚洲 · GB Network Solutions · 马来西亚'
-        ['mirrors.abroad.16']='亚洲 · 孔敬大学 · 泰国'
-        ['mirrors.abroad.17']='欧洲 · Vorboss Ltd · 英国'
-        ['mirrors.abroad.18']='欧洲 · QuickHost · 英国'
-        ['mirrors.abroad.19']='欧洲 · dogado · 德国'
-        ['mirrors.abroad.20']='欧洲 · xTom · 德国'
-        ['mirrors.abroad.21']='欧洲 · 亚琛工业大学(RWTH Aachen) · 德国'
-        ['mirrors.abroad.22']='欧洲 · 德累斯顿大学(AG DSN) · 德国'
-        ['mirrors.abroad.23']='欧洲 · CCIN2P3 · 法国'
-        ['mirrors.abroad.24']='欧洲 · Ircam · 法国'
-        ['mirrors.abroad.25']='欧洲 · Crans · 法国'
-        ['mirrors.abroad.26']='欧洲 · CRIHAN · 法国'
-        ['mirrors.abroad.27']='欧洲 · xTom · 荷兰'
-        ['mirrors.abroad.28']='欧洲 · DataPacket · 荷兰'
-        ['mirrors.abroad.29']='欧洲 · Linux Kernel · 荷兰'
-        ['mirrors.abroad.30']='欧洲 · xTom · 爱沙尼亚'
-        ['mirrors.abroad.31']='欧洲 · netsite · 丹麦'
-        ['mirrors.abroad.32']='欧洲 · Dotsrc · 丹麦'
-        ['mirrors.abroad.33']='欧洲 · Academic Computer Club · 瑞典'
-        ['mirrors.abroad.34']='欧洲 · Lysator · 瑞典'
-        ['mirrors.abroad.35']='欧洲 · Yandex · 俄罗斯'
-        ['mirrors.abroad.36']='欧洲 · ia64 · 俄罗斯'
-        ['mirrors.abroad.37']='欧洲 · Truenetwork · 俄罗斯'
-        ['mirrors.abroad.38']='欧洲 · Belgian Research Network · 比利时'
-        ['mirrors.abroad.39']='欧洲 · 克里特大学计算机中心 · 希腊'
-        ['mirrors.abroad.40']='欧洲 · 马萨里克大学信息学院 · 捷克'
-        ['mirrors.abroad.41']='欧洲 · 捷克理工大学学生会俱乐部(Silicon Hill) · 捷克'
-        ['mirrors.abroad.42']='欧洲 · Vodafone · 捷克'
-        ['mirrors.abroad.43']='欧洲 · CZ.NIC · 捷克'
-        ['mirrors.abroad.44']='欧洲 · 苏黎世联邦理工学院 · 瑞士'
-        ['mirrors.abroad.45']='北美 · Linux Kernel · 美国'
-        ['mirrors.abroad.46']='北美 · 麻省理工学院(MIT) · 美国'
-        ['mirrors.abroad.47']='北美 · 普林斯顿大学数学系 · 美国'
-        ['mirrors.abroad.48']='北美 · 俄勒冈州立大学开源实验室 · 美国'
-        ['mirrors.abroad.49']='北美 · Fremont Cabal Internet Exchange(FCIX) · 美国'
-        ['mirrors.abroad.50']='北美 · xTom · 美国'
-        ['mirrors.abroad.51']='北美 · Steadfast · 美国'
-        ['mirrors.abroad.52']='北美 · 不列颠哥伦比亚大学 · 加拿大'
-        ['mirrors.abroad.53']='北美 · GoCodeIT · 加拿大'
-        ['mirrors.abroad.54']='北美 · Switch · 加拿大'
-        ['mirrors.abroad.55']='南美 · PoP-SC · 巴西'
-        ['mirrors.abroad.56']='南美 · 蓬塔格罗萨州立大学 · 巴西'
-        ['mirrors.abroad.57']='南美 · UFSCar · 巴西'
-        ['mirrors.abroad.58']='南美 · Sysarmy Community · 阿根廷'
-        ['mirrors.abroad.59']='大洋 · Fremont Cabal Internet Exchange(FCIX) · 澳大利亚'
-        ['mirrors.abroad.60']='大洋 · AARNet · 澳大利亚'
-        ['mirrors.abroad.61']='大洋 · DataMossa · 澳大利亚'
-        ['mirrors.abroad.62']='大洋 · Amaze · 澳大利亚'
-        ['mirrors.abroad.63']='大洋 · xTom · 澳大利亚'
-        ['mirrors.abroad.64']='大洋 · Over the Wire · 澳大利亚'
-        ['mirrors.abroad.65']='大洋 · Free Software Mirror Group · 新西兰'
-        ['mirrors.abroad.66']='非洲 · Liquid Telecom · 肯尼亚'
-        ['mirrors.abroad.67']='非洲 · Dimension Data · 南非'
-        ['mirrors.abroad.68']='官方源'
+        ['mirrors.abroad.8']='亚洲 · Taiwan Digital Streaming · 台湾'
+        ['mirrors.abroad.9']='亚洲 · AniGil Linux Archive · 韩国'
+        ['mirrors.abroad.10']='亚洲 · 工业网络安全中心(ICSCoE) · 日本'
+        ['mirrors.abroad.11']='亚洲 · 北陆先端科学技术大学院大学(JAIST) · 日本'
+        ['mirrors.abroad.12']='亚洲 · 山形大学 · 日本'
+        ['mirrors.abroad.13']='亚洲 · xTom · 日本'
+        ['mirrors.abroad.14']='亚洲 · GB Network Solutions · 马来西亚'
+        ['mirrors.abroad.15']='亚洲 · 孔敬大学 · 泰国'
+        ['mirrors.abroad.16']='欧洲 · Vorboss Ltd · 英国'
+        ['mirrors.abroad.17']='欧洲 · dogado · 德国'
+        ['mirrors.abroad.18']='欧洲 · xTom · 德国'
+        ['mirrors.abroad.19']='欧洲 · 亚琛工业大学(RWTH Aachen) · 德国'
+        ['mirrors.abroad.20']='欧洲 · 德累斯顿大学(AG DSN) · 德国'
+        ['mirrors.abroad.21']='欧洲 · CCIN2P3 · 法国'
+        ['mirrors.abroad.22']='欧洲 · Ircam · 法国'
+        ['mirrors.abroad.23']='欧洲 · Crans · 法国'
+        ['mirrors.abroad.24']='欧洲 · CRIHAN · 法国'
+        ['mirrors.abroad.25']='欧洲 · xTom · 荷兰'
+        ['mirrors.abroad.26']='欧洲 · Linux Kernel · 荷兰'
+        ['mirrors.abroad.27']='欧洲 · xTom · 爱沙尼亚'
+        ['mirrors.abroad.28']='欧洲 · netsite · 丹麦'
+        ['mirrors.abroad.29']='欧洲 · Dotsrc · 丹麦'
+        ['mirrors.abroad.30']='欧洲 · Academic Computer Club · 瑞典'
+        ['mirrors.abroad.31']='欧洲 · Lysator · 瑞典'
+        ['mirrors.abroad.32']='欧洲 · Yandex · 俄罗斯'
+        ['mirrors.abroad.33']='欧洲 · Belgian Research Network · 比利时'
+        ['mirrors.abroad.34']='欧洲 · 马萨里克大学信息学院 · 捷克'
+        ['mirrors.abroad.35']='欧洲 · 捷克理工大学学生会俱乐部(Silicon Hill) · 捷克'
+        ['mirrors.abroad.36']='欧洲 · Vodafone · 捷克'
+        ['mirrors.abroad.37']='北美 · Linux Kernel · 美国'
+        ['mirrors.abroad.38']='北美 · 麻省理工学院(MIT) · 美国'
+        ['mirrors.abroad.39']='北美 · 普林斯顿大学数学系 · 美国'
+        ['mirrors.abroad.40']='北美 · 俄勒冈州立大学开源实验室 · 美国'
+        ['mirrors.abroad.41']='北美 · Fremont Cabal Internet Exchange(FCIX) · 美国'
+        ['mirrors.abroad.42']='北美 · xTom · 美国'
+        ['mirrors.abroad.43']='北美 · Steadfast · 美国'
+        ['mirrors.abroad.44']='北美 · 不列颠哥伦比亚大学 · 加拿大'
+        ['mirrors.abroad.45']='北美 · GoCodeIT · 加拿大'
+        ['mirrors.abroad.46']='北美 · Switch · 加拿大'
+        ['mirrors.abroad.47']='南美 · PoP-SC · 巴西'
+        ['mirrors.abroad.48']='南美 · 蓬塔格罗萨州立大学 · 巴西'
+        ['mirrors.abroad.49']='大洋 · Fremont Cabal Internet Exchange(FCIX) · 澳大利亚'
+        ['mirrors.abroad.50']='大洋 · AARNet · 澳大利亚'
+        ['mirrors.abroad.51']='大洋 · DataMossa · 澳大利亚'
+        ['mirrors.abroad.52']='大洋 · Amaze · 澳大利亚'
+        ['mirrors.abroad.53']='大洋 · xTom · 澳大利亚'
+        ['mirrors.abroad.54']='大洋 · Free Software Mirror Group · 新西兰'
+        ['mirrors.abroad.55']='非洲 · Liquid Telecom · 肯尼亚'
+        ['mirrors.abroad.56']='非洲 · Dimension Data · 南非'
+        ['mirrors.abroad.57']='官方源'
     )
 }
 
@@ -8465,36 +8421,29 @@ function msg_pack_zh_hant() {
         ['mirrors.default.16']='中國科技雲'
         ['mirrors.default.17']='官方源'
         ['mirrors.edu.0']='北京大學'
-        ['mirrors.edu.1']='北京交通大學'
-        ['mirrors.edu.2']='北京外國語大學'
-        ['mirrors.edu.3']='北京郵電大學'
-        ['mirrors.edu.4']='重慶大學'
-        ['mirrors.edu.5']='重慶郵電大學'
-        ['mirrors.edu.6']='大連東軟信息學院'
-        ['mirrors.edu.7']='電子科技大學'
-        ['mirrors.edu.8']='華南農業大學'
-        ['mirrors.edu.9']='華中科技大學'
-        ['mirrors.edu.10']='吉林大學'
-        ['mirrors.edu.11']='荊楚理工學院'
-        ['mirrors.edu.12']='江西理工大學'
-        ['mirrors.edu.13']='蘭州大學'
-        ['mirrors.edu.14']='南京大學'
-        ['mirrors.edu.15']='南京工業大學'
-        ['mirrors.edu.16']='南京郵電大學'
-        ['mirrors.edu.17']='南方科技大學'
-        ['mirrors.edu.18']='南陽理工學院'
-        ['mirrors.edu.19']='齊魯工業大學'
-        ['mirrors.edu.20']='清華大學'
-        ['mirrors.edu.21']='山東大學'
-        ['mirrors.edu.22']='上海科技大學'
-        ['mirrors.edu.23']='上海交通大學（思源）'
-        ['mirrors.edu.24']='上海交通大學（致遠）'
-        ['mirrors.edu.25']='武昌首義學院'
-        ['mirrors.edu.26']='西安交通大學'
-        ['mirrors.edu.27']='西北農林科技大學'
-        ['mirrors.edu.28']='浙江大學'
-        ['mirrors.edu.29']='中國科學技術大學'
-        ['mirrors.edu.30']='官方源'
+        ['mirrors.edu.1']='北京外國語大學'
+        ['mirrors.edu.2']='重慶大學'
+        ['mirrors.edu.3']='重慶郵電大學'
+        ['mirrors.edu.4']='華中科技大學'
+        ['mirrors.edu.5']='吉林大學'
+        ['mirrors.edu.6']='荊楚理工學院'
+        ['mirrors.edu.7']='蘭州大學'
+        ['mirrors.edu.8']='南京大學'
+        ['mirrors.edu.9']='南京工業大學'
+        ['mirrors.edu.10']='南京郵電大學'
+        ['mirrors.edu.11']='南方科技大學'
+        ['mirrors.edu.12']='南陽理工學院'
+        ['mirrors.edu.13']='齊魯工業大學'
+        ['mirrors.edu.14']='清華大學'
+        ['mirrors.edu.15']='山東大學'
+        ['mirrors.edu.16']='上海交通大學（思源）'
+        ['mirrors.edu.17']='上海交通大學（致遠）'
+        ['mirrors.edu.18']='武昌首義學院'
+        ['mirrors.edu.19']='西安交通大學'
+        ['mirrors.edu.20']='西北農林科技大學'
+        ['mirrors.edu.21']='浙江大學'
+        ['mirrors.edu.22']='中國科學技術大學'
+        ['mirrors.edu.23']='官方源'
         ['mirrors.abroad.0']='亞洲 · xTom · 香港'
         ['mirrors.abroad.1']='亞洲 · 01Link · 香港'
         ['mirrors.abroad.2']='亞洲 · 新加坡國立大學(NUS) · 新加坡'
@@ -8503,67 +8452,56 @@ function msg_pack_zh_hant() {
         ['mirrors.abroad.5']='亞洲 · 自由軟體實驗室(NCHC) · 臺灣'
         ['mirrors.abroad.6']='亞洲 · OSS Planet · 臺灣'
         ['mirrors.abroad.7']='亞洲 · 國立陽明交通大學 · 臺灣'
-        ['mirrors.abroad.8']='亞洲 · 淡江大學 · 臺灣'
-        ['mirrors.abroad.9']='亞洲 · Taiwan Digital Streaming · 臺灣'
-        ['mirrors.abroad.10']='亞洲 · AniGil Linux Archive · 韓國'
-        ['mirrors.abroad.11']='亞洲 · 工業網路安全中心(ICSCoE) · 日本'
-        ['mirrors.abroad.12']='亞洲 · 北陸先端科學技術大學院大學(JAIST) · 日本'
-        ['mirrors.abroad.13']='亞洲 · 山形大學 · 日本'
-        ['mirrors.abroad.14']='亞洲 · xTom · 日本'
-        ['mirrors.abroad.15']='亞洲 · GB Network Solutions · 馬來西亞'
-        ['mirrors.abroad.16']='亞洲 · 孔敬大學 · 泰國'
-        ['mirrors.abroad.17']='歐洲 · Vorboss Ltd · 英國'
-        ['mirrors.abroad.18']='歐洲 · QuickHost · 英國'
-        ['mirrors.abroad.19']='歐洲 · dogado · 德國'
-        ['mirrors.abroad.20']='歐洲 · xTom · 德國'
-        ['mirrors.abroad.21']='歐洲 · 亞琛工業大學(RWTH Aachen) · 德國'
-        ['mirrors.abroad.22']='歐洲 · 德勒斯登大學(AG DSN) · 德國'
-        ['mirrors.abroad.23']='歐洲 · CCIN2P3 · 法國'
-        ['mirrors.abroad.24']='歐洲 · Ircam · 法國'
-        ['mirrors.abroad.25']='歐洲 · Crans · 法國'
-        ['mirrors.abroad.26']='歐洲 · CRIHAN · 法國'
-        ['mirrors.abroad.27']='歐洲 · xTom · 荷蘭'
-        ['mirrors.abroad.28']='歐洲 · DataPacket · 荷蘭'
-        ['mirrors.abroad.29']='歐洲 · Linux Kernel · 荷蘭'
-        ['mirrors.abroad.30']='歐洲 · xTom · 愛沙尼亞'
-        ['mirrors.abroad.31']='歐洲 · netsite · 丹麥'
-        ['mirrors.abroad.32']='歐洲 · Dotsrc · 丹麥'
-        ['mirrors.abroad.33']='歐洲 · Academic Computer Club · 瑞典'
-        ['mirrors.abroad.34']='歐洲 · Lysator · 瑞典'
-        ['mirrors.abroad.35']='歐洲 · Yandex · 俄羅斯'
-        ['mirrors.abroad.36']='歐洲 · ia64 · 俄羅斯'
-        ['mirrors.abroad.37']='歐洲 · Truenetwork · 俄羅斯'
-        ['mirrors.abroad.38']='歐洲 · Belgian Research Network · 比利時'
-        ['mirrors.abroad.39']='歐洲 · 克里特大學計算機中心 · 希臘'
-        ['mirrors.abroad.40']='歐洲 · 馬薩里克大學信息學院 · 捷克'
-        ['mirrors.abroad.41']='歐洲 · 捷克理工大學學生會俱樂部(Silicon Hill) · 捷克'
-        ['mirrors.abroad.42']='歐洲 · Vodafone · 捷克'
-        ['mirrors.abroad.43']='歐洲 · CZ.NIC · 捷克'
-        ['mirrors.abroad.44']='歐洲 · 蘇黎世聯邦理工學院 · 瑞士'
-        ['mirrors.abroad.45']='北美 · Linux Kernel · 美國'
-        ['mirrors.abroad.46']='北美 · 麻省理工學院(MIT) · 美國'
-        ['mirrors.abroad.47']='北美 · 普林斯頓大學數學系 · 美國'
-        ['mirrors.abroad.48']='北美 · 俄勒岡州立大學開源實驗室 · 美國'
-        ['mirrors.abroad.49']='北美 · Fremont Cabal Internet Exchange(FCIX) · 美國'
-        ['mirrors.abroad.50']='北美 · xTom · 美國'
-        ['mirrors.abroad.51']='北美 · Steadfast · 美國'
-        ['mirrors.abroad.52']='北美 · 不列顛哥倫比亞大學 · 加拿大'
-        ['mirrors.abroad.53']='北美 · GoCodeIT · 加拿大'
-        ['mirrors.abroad.54']='北美 · Switch · 加拿大'
-        ['mirrors.abroad.55']='南美 · PoP-SC · 巴西'
-        ['mirrors.abroad.56']='南美 · 蓬塔格羅薩州立大學 · 巴西'
-        ['mirrors.abroad.57']='南美 · UFSCar · 巴西'
-        ['mirrors.abroad.58']='南美 · Sysarmy Community · 阿根廷'
-        ['mirrors.abroad.59']='大洋 · Fremont Cabal Internet Exchange(FCIX) · 澳大利亞'
-        ['mirrors.abroad.60']='大洋 · AARNet · 澳大利亞'
-        ['mirrors.abroad.61']='大洋 · DataMossa · 澳大利亞'
-        ['mirrors.abroad.62']='大洋 · Amaze · 澳大利亞'
-        ['mirrors.abroad.63']='大洋 · xTom · 澳大利亞'
-        ['mirrors.abroad.64']='大洋 · Over the Wire · 澳大利亞'
-        ['mirrors.abroad.65']='大洋 · Free Software Mirror Group · 紐西蘭'
-        ['mirrors.abroad.66']='非洲 · Liquid Telecom · 肯亞'
-        ['mirrors.abroad.67']='非洲 · Dimension Data · 南非'
-        ['mirrors.abroad.68']='官方源'
+        ['mirrors.abroad.8']='亞洲 · Taiwan Digital Streaming · 臺灣'
+        ['mirrors.abroad.9']='亞洲 · AniGil Linux Archive · 韓國'
+        ['mirrors.abroad.10']='亞洲 · 工業網路安全中心(ICSCoE) · 日本'
+        ['mirrors.abroad.11']='亞洲 · 北陸先端科學技術大學院大學(JAIST) · 日本'
+        ['mirrors.abroad.12']='亞洲 · 山形大學 · 日本'
+        ['mirrors.abroad.13']='亞洲 · xTom · 日本'
+        ['mirrors.abroad.14']='亞洲 · GB Network Solutions · 馬來西亞'
+        ['mirrors.abroad.15']='亞洲 · 孔敬大學 · 泰國'
+        ['mirrors.abroad.16']='歐洲 · Vorboss Ltd · 英國'
+        ['mirrors.abroad.17']='歐洲 · dogado · 德國'
+        ['mirrors.abroad.18']='歐洲 · xTom · 德國'
+        ['mirrors.abroad.19']='歐洲 · 亞琛工業大學(RWTH Aachen) · 德國'
+        ['mirrors.abroad.20']='歐洲 · 德勒斯登大學(AG DSN) · 德國'
+        ['mirrors.abroad.21']='歐洲 · CCIN2P3 · 法國'
+        ['mirrors.abroad.22']='歐洲 · Ircam · 法國'
+        ['mirrors.abroad.23']='歐洲 · Crans · 法國'
+        ['mirrors.abroad.24']='歐洲 · CRIHAN · 法國'
+        ['mirrors.abroad.25']='歐洲 · xTom · 荷蘭'
+        ['mirrors.abroad.26']='歐洲 · Linux Kernel · 荷蘭'
+        ['mirrors.abroad.27']='歐洲 · xTom · 愛沙尼亞'
+        ['mirrors.abroad.28']='歐洲 · netsite · 丹麥'
+        ['mirrors.abroad.29']='歐洲 · Dotsrc · 丹麥'
+        ['mirrors.abroad.30']='歐洲 · Academic Computer Club · 瑞典'
+        ['mirrors.abroad.31']='歐洲 · Lysator · 瑞典'
+        ['mirrors.abroad.32']='歐洲 · Yandex · 俄羅斯'
+        ['mirrors.abroad.33']='歐洲 · Belgian Research Network · 比利時'
+        ['mirrors.abroad.34']='歐洲 · 馬薩里克大學信息學院 · 捷克'
+        ['mirrors.abroad.35']='歐洲 · 捷克理工大學學生會俱樂部(Silicon Hill) · 捷克'
+        ['mirrors.abroad.36']='歐洲 · Vodafone · 捷克'
+        ['mirrors.abroad.37']='北美 · Linux Kernel · 美國'
+        ['mirrors.abroad.38']='北美 · 麻省理工學院(MIT) · 美國'
+        ['mirrors.abroad.39']='北美 · 普林斯頓大學數學系 · 美國'
+        ['mirrors.abroad.40']='北美 · 俄勒岡州立大學開源實驗室 · 美國'
+        ['mirrors.abroad.41']='北美 · Fremont Cabal Internet Exchange(FCIX) · 美國'
+        ['mirrors.abroad.42']='北美 · xTom · 美國'
+        ['mirrors.abroad.43']='北美 · Steadfast · 美國'
+        ['mirrors.abroad.44']='北美 · 不列顛哥倫比亞大學 · 加拿大'
+        ['mirrors.abroad.45']='北美 · GoCodeIT · 加拿大'
+        ['mirrors.abroad.46']='北美 · Switch · 加拿大'
+        ['mirrors.abroad.47']='南美 · PoP-SC · 巴西'
+        ['mirrors.abroad.48']='南美 · 蓬塔格羅薩州立大學 · 巴西'
+        ['mirrors.abroad.49']='大洋 · Fremont Cabal Internet Exchange(FCIX) · 澳大利亞'
+        ['mirrors.abroad.50']='大洋 · AARNet · 澳大利亞'
+        ['mirrors.abroad.51']='大洋 · DataMossa · 澳大利亞'
+        ['mirrors.abroad.52']='大洋 · Amaze · 澳大利亞'
+        ['mirrors.abroad.53']='大洋 · xTom · 澳大利亞'
+        ['mirrors.abroad.54']='大洋 · Free Software Mirror Group · 紐西蘭'
+        ['mirrors.abroad.55']='非洲 · Liquid Telecom · 肯亞'
+        ['mirrors.abroad.56']='非洲 · Dimension Data · 南非'
+        ['mirrors.abroad.57']='官方源'
     )
     SPONSOR_ADS[0]="1Panel · 新一代的 Linux 伺服器維運管理面板 ➜  \033[3mhttps://1panel.cn\033[0m"
 }
@@ -8698,36 +8636,29 @@ Issue Report {}'
         ['mirrors.default.16']='China Science & Technology Cloud'
         ['mirrors.default.17']='Official Source'
         ['mirrors.edu.0']='Peking University'
-        ['mirrors.edu.1']='Beijing Jiaotong University'
-        ['mirrors.edu.2']='Beijing Foreign Studies University'
-        ['mirrors.edu.3']='Beijing University of Posts and Telecommunications'
-        ['mirrors.edu.4']='Chongqing University'
-        ['mirrors.edu.5']='Chongqing University of Posts and Telecommunications'
-        ['mirrors.edu.6']='Dalian Neusoft University of Information'
-        ['mirrors.edu.7']='University of Electronic Science and Technology of China'
-        ['mirrors.edu.8']='South China Agricultural University'
-        ['mirrors.edu.9']='Huazhong University of Science and Technology'
-        ['mirrors.edu.10']='Jilin University'
-        ['mirrors.edu.11']='Jingchu University of Technology'
-        ['mirrors.edu.12']='Jiangxi University of Science and Technology'
-        ['mirrors.edu.13']='Lanzhou University'
-        ['mirrors.edu.14']='Nanjing University'
-        ['mirrors.edu.15']='Nanjing Tech University'
-        ['mirrors.edu.16']='Nanjing University of Posts and Telecommunications'
-        ['mirrors.edu.17']='Southern University of Science and Technology'
-        ['mirrors.edu.18']='Nanyang Institute of Technology'
-        ['mirrors.edu.19']='Qilu University of Technology'
-        ['mirrors.edu.20']='Tsinghua University'
-        ['mirrors.edu.21']='Shandong University'
-        ['mirrors.edu.22']='ShanghaiTech University'
-        ['mirrors.edu.23']='Shanghai Jiao Tong University (Siyuan)'
-        ['mirrors.edu.24']='Shanghai Jiao Tong University (Zhiyuan)'
-        ['mirrors.edu.25']='Wuchang Shouyi University'
-        ['mirrors.edu.26']="Xi'an Jiaotong University"
-        ['mirrors.edu.27']='Northwest A&F University'
-        ['mirrors.edu.28']='Zhejiang University'
-        ['mirrors.edu.29']='University of Science and Technology of China'
-        ['mirrors.edu.30']='Official Source'
+        ['mirrors.edu.1']='Beijing Foreign Studies University'
+        ['mirrors.edu.2']='Chongqing University'
+        ['mirrors.edu.3']='Chongqing University of Posts and Telecommunications'
+        ['mirrors.edu.4']='Huazhong University of Science and Technology'
+        ['mirrors.edu.5']='Jilin University'
+        ['mirrors.edu.6']='Jingchu University of Technology'
+        ['mirrors.edu.7']='Lanzhou University'
+        ['mirrors.edu.8']='Nanjing University'
+        ['mirrors.edu.9']='Nanjing Tech University'
+        ['mirrors.edu.10']='Nanjing University of Posts and Telecommunications'
+        ['mirrors.edu.11']='Southern University of Science and Technology'
+        ['mirrors.edu.12']='Nanyang Institute of Technology'
+        ['mirrors.edu.13']='Qilu University of Technology'
+        ['mirrors.edu.14']='Tsinghua University'
+        ['mirrors.edu.15']='Shandong University'
+        ['mirrors.edu.16']='Shanghai Jiao Tong University (Siyuan)'
+        ['mirrors.edu.17']='Shanghai Jiao Tong University (Zhiyuan)'
+        ['mirrors.edu.18']='Wuchang Shouyi University'
+        ['mirrors.edu.19']="Xi'an Jiaotong University"
+        ['mirrors.edu.20']='Northwest A&F University'
+        ['mirrors.edu.21']='Zhejiang University'
+        ['mirrors.edu.22']='University of Science and Technology of China'
+        ['mirrors.edu.23']='Official Source'
         ['mirrors.abroad.0']='AS · xTom · Hong Kong'
         ['mirrors.abroad.1']='AS · 01Link · Hong Kong'
         ['mirrors.abroad.2']='AS · National University of Singapore (NUS) · Singapore'
@@ -8736,67 +8667,56 @@ Issue Report {}'
         ['mirrors.abroad.5']='AS · NCHC Free Software Lab · Taiwan'
         ['mirrors.abroad.6']='AS · OSS Planet · Taiwan'
         ['mirrors.abroad.7']='AS · National Yang Ming Chiao Tung University · Taiwan'
-        ['mirrors.abroad.8']='AS · Tamkang University · Taiwan'
-        ['mirrors.abroad.9']='AS · Taiwan Digital Streaming · Taiwan'
-        ['mirrors.abroad.10']='AS · AniGil Linux Archive · Korea'
-        ['mirrors.abroad.11']='AS · ICSCoE (Industrial Cyber Security Center of Excellence) · Japan'
-        ['mirrors.abroad.12']='AS · JAIST (Japan Advanced Institute of Science and Technology) · Japan'
-        ['mirrors.abroad.13']='AS · Yamagata University · Japan'
-        ['mirrors.abroad.14']='AS · xTom · Japan'
-        ['mirrors.abroad.15']='AS · GB Network Solutions · Malaysia'
-        ['mirrors.abroad.16']='AS · Khon Kaen University · Thailand'
-        ['mirrors.abroad.17']='EU · Vorboss Ltd · United Kiongdom'
-        ['mirrors.abroad.18']='EU · QuickHost · United Kiongdom'
-        ['mirrors.abroad.19']='EU · dogado · Germany'
-        ['mirrors.abroad.20']='EU · xTom · Germany'
-        ['mirrors.abroad.21']='EU · RWTH Aachen University · Germany'
-        ['mirrors.abroad.22']='EU · Dresden University (AG DSN) · Germany'
-        ['mirrors.abroad.23']='EU · CCIN2P3 · France'
-        ['mirrors.abroad.24']='EU · Ircam · France'
-        ['mirrors.abroad.25']='EU · Crans · France'
-        ['mirrors.abroad.26']='EU · CRIHAN · France'
-        ['mirrors.abroad.27']='EU · xTom · Netherlands'
-        ['mirrors.abroad.28']='EU · DataPacket · Netherlands'
-        ['mirrors.abroad.29']='EU · Linux Kernel · Netherlands'
-        ['mirrors.abroad.30']='EU · xTom · Estonia'
-        ['mirrors.abroad.31']='EU · netsite · Denmark'
-        ['mirrors.abroad.32']='EU · Dotsrc · Denmark'
-        ['mirrors.abroad.33']='EU · Academic Computer Club · Sweden'
-        ['mirrors.abroad.34']='EU · Lysator · Sweden'
-        ['mirrors.abroad.35']='EU · Yandex · Russia'
-        ['mirrors.abroad.36']='EU · ia64 · Russia'
-        ['mirrors.abroad.37']='EU · Truenetwork · Russia'
-        ['mirrors.abroad.38']='EU · Belgian Research Network · Belgium'
-        ['mirrors.abroad.39']='EU · University of Crete Computer Center · Greece'
-        ['mirrors.abroad.40']='EU · Masaryk University Faculty of Informatics · Czech'
-        ['mirrors.abroad.41']='EU · Czech Technical University Student Club (Silicon Hill) · Czech'
-        ['mirrors.abroad.42']='EU · Vodafone · Czech'
-        ['mirrors.abroad.43']='EU · CZ.NIC · Czech'
-        ['mirrors.abroad.44']='EU · ETH Zurich · Switzerland'
-        ['mirrors.abroad.45']='NA · Linux Kernel · United States'
-        ['mirrors.abroad.46']='NA · MIT · United States'
-        ['mirrors.abroad.47']='NA · Princeton University Department of Mathematics · United States'
-        ['mirrors.abroad.48']='NA · Oregon State University Open Source Lab · United States'
-        ['mirrors.abroad.49']='NA · Fremont Cabal Internet Exchange(FCIX) · United States'
-        ['mirrors.abroad.50']='NA · xTom · United States'
-        ['mirrors.abroad.51']='NA · Steadfast · United States'
-        ['mirrors.abroad.52']='NA · University of British Columbia · Canada'
-        ['mirrors.abroad.53']='NA · GoCodeIT · Canada'
-        ['mirrors.abroad.54']='NA · Switch · Canada'
-        ['mirrors.abroad.55']='SA · PoP-SC · Brazil'
-        ['mirrors.abroad.56']='SA · State University of Ponta Grossa · Brazil'
-        ['mirrors.abroad.57']='SA · UFSCar · Brazil'
-        ['mirrors.abroad.58']='SA · Sysarmy Community · Argentina'
-        ['mirrors.abroad.59']='OC · Fremont Cabal Internet Exchange(FCIX) · Australia'
-        ['mirrors.abroad.60']='OC · AARNet · Australia'
-        ['mirrors.abroad.61']='OC · DataMossa · Australia'
-        ['mirrors.abroad.62']='OC · Amaze · Australia'
-        ['mirrors.abroad.63']='OC · xTom · Australia'
-        ['mirrors.abroad.64']='OC · Over the Wire · Australia'
-        ['mirrors.abroad.65']='OC · Free Software Mirror Group · New Zealand'
-        ['mirrors.abroad.66']='AF · Liquid Telecom · Kenya'
-        ['mirrors.abroad.67']='AF · Dimension Data · South Africa'
-        ['mirrors.abroad.68']='Official Source'
+        ['mirrors.abroad.8']='AS · Taiwan Digital Streaming · Taiwan'
+        ['mirrors.abroad.9']='AS · AniGil Linux Archive · Korea'
+        ['mirrors.abroad.10']='AS · ICSCoE (Industrial Cyber Security Center of Excellence) · Japan'
+        ['mirrors.abroad.11']='AS · JAIST (Japan Advanced Institute of Science and Technology) · Japan'
+        ['mirrors.abroad.12']='AS · Yamagata University · Japan'
+        ['mirrors.abroad.13']='AS · xTom · Japan'
+        ['mirrors.abroad.14']='AS · GB Network Solutions · Malaysia'
+        ['mirrors.abroad.15']='AS · Khon Kaen University · Thailand'
+        ['mirrors.abroad.16']='EU · Vorboss Ltd · United Kiongdom'
+        ['mirrors.abroad.17']='EU · dogado · Germany'
+        ['mirrors.abroad.18']='EU · xTom · Germany'
+        ['mirrors.abroad.19']='EU · RWTH Aachen University · Germany'
+        ['mirrors.abroad.20']='EU · Dresden University (AG DSN) · Germany'
+        ['mirrors.abroad.21']='EU · CCIN2P3 · France'
+        ['mirrors.abroad.22']='EU · Ircam · France'
+        ['mirrors.abroad.23']='EU · Crans · France'
+        ['mirrors.abroad.24']='EU · CRIHAN · France'
+        ['mirrors.abroad.25']='EU · xTom · Netherlands'
+        ['mirrors.abroad.26']='EU · Linux Kernel · Netherlands'
+        ['mirrors.abroad.27']='EU · xTom · Estonia'
+        ['mirrors.abroad.28']='EU · netsite · Denmark'
+        ['mirrors.abroad.29']='EU · Dotsrc · Denmark'
+        ['mirrors.abroad.30']='EU · Academic Computer Club · Sweden'
+        ['mirrors.abroad.31']='EU · Lysator · Sweden'
+        ['mirrors.abroad.32']='EU · Yandex · Russia'
+        ['mirrors.abroad.33']='EU · Belgian Research Network · Belgium'
+        ['mirrors.abroad.34']='EU · Masaryk University Faculty of Informatics · Czech'
+        ['mirrors.abroad.35']='EU · Czech Technical University Student Club (Silicon Hill) · Czech'
+        ['mirrors.abroad.36']='EU · Vodafone · Czech'
+        ['mirrors.abroad.37']='NA · Linux Kernel · United States'
+        ['mirrors.abroad.38']='NA · MIT · United States'
+        ['mirrors.abroad.39']='NA · Princeton University Department of Mathematics · United States'
+        ['mirrors.abroad.40']='NA · Oregon State University Open Source Lab · United States'
+        ['mirrors.abroad.41']='NA · Fremont Cabal Internet Exchange(FCIX) · United States'
+        ['mirrors.abroad.42']='NA · xTom · United States'
+        ['mirrors.abroad.43']='NA · Steadfast · United States'
+        ['mirrors.abroad.44']='NA · University of British Columbia · Canada'
+        ['mirrors.abroad.45']='NA · GoCodeIT · Canada'
+        ['mirrors.abroad.46']='NA · Switch · Canada'
+        ['mirrors.abroad.47']='SA · PoP-SC · Brazil'
+        ['mirrors.abroad.48']='SA · State University of Ponta Grossa · Brazil'
+        ['mirrors.abroad.49']='OC · Fremont Cabal Internet Exchange(FCIX) · Australia'
+        ['mirrors.abroad.50']='OC · AARNet · Australia'
+        ['mirrors.abroad.51']='OC · DataMossa · Australia'
+        ['mirrors.abroad.52']='OC · Amaze · Australia'
+        ['mirrors.abroad.53']='OC · xTom · Australia'
+        ['mirrors.abroad.54']='OC · Free Software Mirror Group · New Zealand'
+        ['mirrors.abroad.55']='AF · Liquid Telecom · Kenya'
+        ['mirrors.abroad.56']='AF · Dimension Data · South Africa'
+        ['mirrors.abroad.57']='Official Source'
     )
     SPONSOR_ADS=(
         "1Panel · Top-Rated Web-based Linux Server Management Tool ➜  \033[3mhttps://1panel.cn\033[0m"

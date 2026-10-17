@@ -1,6 +1,6 @@
 #!/bin/bash
 ## Author: SuperManito
-## Modified: 2026-06-16
+## Modified: 2026-10-07
 ## License: MIT
 ## GitHub: https://github.com/SuperManito/LinuxMirrors
 ## Website: https://linuxmirrors.cn
@@ -597,7 +597,7 @@ function collect_system_info() {
     local is_supported="true"
     case "${SYSTEM_JUDGMENT}" in
     "${SYSTEM_DEBIAN}")
-        if [[ ! "${SYSTEM_VERSION_ID_MAJOR}" =~ ^(1[0-3]|[8-9])$ ]]; then
+        if [[ ! "${SYSTEM_VERSION_ID_MAJOR}" =~ ^(1[0-4]|[8-9])$ ]]; then
             is_supported="false"
         fi
         if [[ "${SYSTEM_VERSION_CODENAME}" == "sid" ]]; then
@@ -643,7 +643,7 @@ function collect_system_info() {
         fi
         ;;
     "${SYSTEM_OPENEULER}")
-        if [[ "${SYSTEM_VERSION_ID_MAJOR}" != 2[0-5] ]]; then
+        if [[ "${SYSTEM_VERSION_ID_MAJOR}" != 2[0-6] ]]; then
             is_supported="false"
         fi
         ;;
@@ -734,6 +734,14 @@ function collect_system_info() {
             ;;
         "${SYSTEM_RASPBERRY_PI_OS}")
             SOURCE_BRANCH="raspberrypi"
+            ;;
+        "${SYSTEM_DEEPIN}")
+            # deepin 25 起仓库路径追加版本代号（如 deepin/beige），旧版本为 deepin
+            if [[ "${SYSTEM_VERSION_ID_MAJOR}" -ge 25 ]]; then
+                SOURCE_BRANCH="deepin/${SYSTEM_VERSION_CODENAME,,}"
+            else
+                SOURCE_BRANCH="deepin"
+            fi
             ;;
         "${SYSTEM_RHEL}")
             case "${SYSTEM_VERSION_ID_MAJOR}" in
@@ -1781,25 +1789,6 @@ ${proposed_source_tips}
 $(gen_deb822_disabled "${1}" "${2}-proposed" "${3}")"
     }
 
-    ## 使用官方源
-    if [[ "${USE_OFFICIAL_SOURCE}" == "true" ]]; then
-        case "${SYSTEM_JUDGMENT}" in
-        "${SYSTEM_UBUNTU}" | "${SYSTEM_ZORIN}")
-            if [[ "${DEVICE_ARCH_RAW}" == "x86_64" || "${DEVICE_ARCH_RAW}" == *i?86* ]]; then
-                SOURCE="archive.ubuntu.com"
-            else
-                SOURCE="ports.ubuntu.com"
-            fi
-            ;;
-        "${SYSTEM_KALI}")
-            SOURCE="http.kali.org"
-            ;;
-        "${SYSTEM_DEEPIN}")
-            SOURCE="community-packages.deepin.com"
-            ;;
-        esac
-    fi
-
     # 注：SOURCE_<XXX> SOURCE_<XXX>_BRANCH 系列变量默认为空值，仅在自定义（使用相关命令选项）时提供，需注意逻辑顺序
     local repo_components=""                          # 软件源仓库区域
     local source_address="${SOURCE}/${SOURCE_BRANCH}" # 软件源地址
@@ -1897,7 +1886,11 @@ $(gen_deb "${source_address}" "${SYSTEM_VERSION_CODENAME}" "${repo_components}")
         fi
         if [[ "${USE_OFFICIAL_SOURCE}" == "true" ]]; then
             SOURCE="community-packages.deepin.com"
-            SOURCE_BRANCH="deepin"
+            if [[ "${SYSTEM_VERSION_ID_MAJOR}" -ge 25 ]]; then
+                SOURCE_BRANCH="deepin/${SYSTEM_VERSION_CODENAME,,}"
+            else
+                SOURCE_BRANCH="deepin"
+            fi
             source_address="${SOURCE}/${SOURCE_BRANCH}"
         fi
         apt_source_content="${deb_src_disabled_tips}
@@ -2058,7 +2051,6 @@ $(gen_deb "${source_address}" "${base_system_codename}" "${repo_components}")"
             apt_source_file="${File_ProxmoxSources}"
             apt_source_content="$(gen_deb822_unsrc "${source_address}/debian/pve" "${SYSTEM_VERSION_CODENAME}" "pve-no-subscription")"
             write_apt_source
-            _DEB22_ARCHIVE_KEYRING=""
             # Ceph 仓库
             if [ -f "${File_ProxmoxCephSources}" ]; then
                 local ceph_codename="$(ceph -v | grep ceph | awk '{print $(NF-1)}')"
@@ -2066,6 +2058,7 @@ $(gen_deb "${source_address}" "${base_system_codename}" "${repo_components}")"
                 apt_source_content="$(gen_deb822_unsrc "${source_address}/debian/ceph-${ceph_codename}" "${SYSTEM_VERSION_CODENAME}" "no-subscription")"
                 write_apt_source
             fi
+            _DEB22_ARCHIVE_KEYRING=""
         else
             apt_source_file="${File_ProxmoxSourceList}"
             apt_source_content="$(gen_deb_unsrc "${source_address}/debian/pve" "${SYSTEM_VERSION_CODENAME}" "pve-no-subscription")"
@@ -2412,7 +2405,7 @@ function change_mirrors_openEuler() {
 
     ## 修改源
     cd $Dir_YumRepos
-    sed -e "s|^baseurl=http|baseurl=${WEB_PROTOCOL}|g" \
+    sed -e "s|^baseurl=https|baseurl=${WEB_PROTOCOL}|g" \
         -e "s|repo.openeuler.org|${SOURCE}/${SOURCE_BRANCH}|g" \
         -i \
         openEuler.repo
@@ -6064,52 +6057,52 @@ function gen_repo_files_openEuler() {
     cat <<'EOF' >$Dir_YumRepos/openEuler.repo
 [OS]
 name=OS
-baseurl=http://repo.openeuler.org/openEuler-version/OS/$basearch/
+baseurl=https://repo.openeuler.org/openEuler-version/OS/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=http://repo.openeuler.org/openEuler-version/OS/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=https://repo.openeuler.org/openEuler-version/OS/$basearch/RPM-GPG-KEY-openEuler
 
 [everything]
 name=everything
-baseurl=http://repo.openeuler.org/openEuler-version/everything/$basearch/
+baseurl=https://repo.openeuler.org/openEuler-version/everything/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=http://repo.openeuler.org/openEuler-version/everything/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=https://repo.openeuler.org/openEuler-version/OS/$basearch/RPM-GPG-KEY-openEuler
 
 [EPOL]
 name=EPOL
-baseurl=http://repo.openeuler.org/openEuler-version/EPOL/main/$basearch/
+baseurl=https://repo.openeuler.org/openEuler-version/EPOL/main/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=http://repo.openeuler.org/openEuler-version/OS/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=https://repo.openeuler.org/openEuler-version/OS/$basearch/RPM-GPG-KEY-openEuler
 
 [debuginfo]
 name=debuginfo
-baseurl=http://repo.openeuler.org/openEuler-version/debuginfo/$basearch/
+baseurl=https://repo.openeuler.org/openEuler-version/debuginfo/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=http://repo.openeuler.org/openEuler-version/debuginfo/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=https://repo.openeuler.org/openEuler-version/debuginfo/$basearch/RPM-GPG-KEY-openEuler
 
 [source]
 name=source
-baseurl=http://repo.openeuler.org/openEuler-version/source/
+baseurl=https://repo.openeuler.org/openEuler-version/source/
 enabled=1
 gpgcheck=1
-gpgkey=http://repo.openeuler.org/openEuler-version/source/RPM-GPG-KEY-openEuler
+gpgkey=https://repo.openeuler.org/openEuler-version/source/RPM-GPG-KEY-openEuler
 
 [update]
 name=update
-baseurl=http://repo.openeuler.org/openEuler-version/update/$basearch/
+baseurl=https://repo.openeuler.org/openEuler-version/update/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=http://repo.openeuler.org/openEuler-version/OS/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=https://repo.openeuler.org/openEuler-version/OS/$basearch/RPM-GPG-KEY-openEuler
 
 [update-source]
 name=update-source
-baseurl=http://repo.openeuler.org/openEuler-version/update/source/
-enabled=1
+baseurl=https://repo.openeuler.org/openEuler-version/update/source/
+enabled=0
 gpgcheck=1
-gpgkey=http://repo.openeuler.org/openEuler-version/source/RPM-GPG-KEY-openEuler
+gpgkey=https://repo.openeuler.org/openEuler-version/source/RPM-GPG-KEY-openEuler
 EOF
     ## 替换版本号
     local version_name="$(get_os_release_value VERSION | sed 's/["()]//g; s/[_ ]\+/-/g; s/^-\+\|-\+$//g')"
